@@ -1,0 +1,3 @@
+"mississippi"\n"mis*is*p*."
+"aab"\n"c*a*b"
+"mississippi"\n".*"
