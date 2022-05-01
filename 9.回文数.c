@@ -40,9 +40,22 @@
  * 你能不将整数转为字符串来解决这个问题吗？
  * 
  */
+// 2147483647  INT_MAX
+// 1000000000  1E9
+
 
 // @lc code=start
+bool isPalindromeSub(int x, int large) {
+    if (large == 0 || (x < 10 && large == 1)) {
+        return true;
+    }
 
+    int i, r;
+    i = x / large;
+    r = x % 10;
+    
+    return ((i == r) && isPalindromeSub(x % large / 10, large / 100));
+}
 
 bool isPalindrome(int x){
     if (x < 0) {
@@ -53,28 +66,12 @@ bool isPalindrome(int x){
 
 
     int large = 1e9;
-    while (0 == x/large) // x >= 10
+    while (0 == x / large) // x >= 10
     {
         large /= 10;
     }
 
-    int small = 10;
-    int i, r;
-
-    while (large >= small)
-    {
-        i = x / large;
-        r = (x % small) / (small / 10);
-
-        if (i != r) {
-            return false;
-        }
-
-        x %= large;
-        large /= 10;
-        small *= 10;
-    }
-    return true;
+    return isPalindromeSub(x, large);
 }
 
 
