@@ -26,13 +26,14 @@
 // @lc code=start
 int myabs(int a)
 {
-    return(a >= 0 ? a:(0-a));
+    return (a > 0 ? a : (0-a));
 }
 
 int comp(void *a, void *b) {
     return (*(int *)a - *(int *)b);
 }
 
+# if 0
 int threeSumClosest(int* nums, int numsSize, int target){
     int sum = 0, i = 0;
     if (3 >= numsSize) {
@@ -43,7 +44,7 @@ int threeSumClosest(int* nums, int numsSize, int target){
     }
 
     int l = 0, r = 0, min = 0, sumtemp = 0, abs = 0;
-    qsort(nums, numsSize, sizeof(int), comp);  // 排序
+    qsort(nums, numsSize, sizeof(int), &comp);  // 排序
 
     sum = nums[0] + nums[1] + nums[2];         // 三数之和最小值
     min = myabs(sum - target);
@@ -84,7 +85,45 @@ int threeSumClosest(int* nums, int numsSize, int target){
     }
     return sum;
 }
+#endif
+int threeSumClosest(int* nums, int numsSize, int target){
+    int sum = 0, i = 0;
+    if (3 >= numsSize) {
+        for (i = 0; i < numsSize; i++) {
+            sum += nums[i];
+        }
+        return sum;
+    }
 
+    int l = 0, r = 0, min = 0, sumtemp = 0, abs = 0;
+    qsort(nums, numsSize, sizeof(int), &comp);  // 排序
+    sum = nums[0] + nums[1] + nums[2];
+    min = myabs(sum - target);
 
+    for (i = 0; i < numsSize - 2; i++) {
+        l = i + 1;
+        r = numsSize - 1;
+
+        while (l < r) {
+            sumtemp = nums[i] + nums[l] + nums[r];
+            abs = myabs(sumtemp - target);
+            
+            if (min > abs) {
+                min = abs;
+                sum = sumtemp;
+            }
+
+            if (sumtemp < target) {
+                l++;
+            } else if (sumtemp > target) {
+                r--;
+            } else {
+                return sum;
+            }
+        }
+    }
+
+    return sum;
+}
 // @lc code=end
 

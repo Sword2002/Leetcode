@@ -37,8 +37,39 @@
  */
 
 // @lc code=start
+#if 1
+char * longestCommonPrefix(char ** strs, int strsSize)
+{
+    if (!strs) {
+        return NULL;
+    }
 
+    int *strslen = (int *)malloc(sizeof(int) * strsSize);
+    int i;
 
+    // 先求字符串长度，避免在循环中每次比较
+    for (i = 0; i < strsSize; i++) {
+        strslen[i] = strlen(strs[i]);
+    }
+
+    i = 0;
+    while (*(strs[0] + i)) {
+        char ch0 = *(strs[0] + i);
+        int j;
+        for (j = 1; j < strsSize; j++) {
+            if ((i >= strslen[j]) || (*(strs[j] + i) != ch0)) {
+                *(strs[0] + i) = '\0';
+                return strs[0];
+            }
+        }
+        i++;
+    }
+
+    *(strs[0] + i) = '\0';
+    return strs[0];
+}
+
+#else
 char * longestCommonPrefix(char ** strs, int strsSize){
 
     if (0 == strsSize) {                            // 输入空
@@ -77,7 +108,7 @@ char * longestCommonPrefix(char ** strs, int strsSize){
 
     return maxsame;
 }
-
+#endif
 
 // @lc code=end
 

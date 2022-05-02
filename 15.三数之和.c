@@ -34,15 +34,13 @@
  */
 
 // @lc code=start
+#include <stdlib.h>
 
+int mycmp(int *a, int *b)
+{
+    return (*a - *b);
+}
 
-/**
- * Return an array of arrays of size *returnSize.
- * The sizes of the arrays are returned as *returnColumnSizes array.
- * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
- */
-void insertion_sort(int arr[], int len);
-#if 1
 int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes)
 {
     if (numsSize < 3)
@@ -51,7 +49,8 @@ int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes
         return NULL;
     }
 
-    insertion_sort(nums, numsSize); // 排序：升序
+    qsort(nums, numsSize, sizeof(int), &mycmp); // 排序：升序
+
     int **res = (int **)malloc(sizeof(int *) * 6 * numsSize); // 
     *returnColumnSizes = malloc(sizeof(int) * 6 * numsSize);
     
@@ -75,6 +74,7 @@ int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes
                 res[r][1] = nums[j];
                 res[r][2] = nums[k];
                 (*returnColumnSizes)[r++] = 3;
+
                 while(nums[j] == nums[++j] && j < k) {} // 去重复
                 while(nums[k] == nums[--k] && j < k) {} // 去重复
             }
@@ -85,67 +85,7 @@ int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes
     *returnSize = r;
     return ((int **)res);
 }
-#else
-int comp(const void *a,const void *b)
-{
-    return *(int *)a - *(int *)b;
-}
-int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes){
-    *returnSize = 0;
-    if (numsSize == 0) {
-        return 0;
-    }
-    int **ret = (int **)malloc(sizeof(int *) * (numsSize + 1) * 6);
-    *returnSize = 0;
-    short left = 0;
-    short right = numsSize - 1;
-    int target = 0;
-    
-    *returnColumnSizes = malloc(sizeof(int) * (numsSize + 1) * 6);
-    qsort(nums, numsSize, sizeof(int), comp);
-    ret[*returnSize] = malloc(sizeof(int) * 3);
 
-    while (left + 1 < right) {
-        int i = left + 1;
-        int j = right;
-        target = 0 - nums[left];
-        while (i < j) {
-            if (nums[i] + nums[j] < target) {
-                i++;
-            } else if (nums[i] + nums[j] > target) {
-                j--;
-            } else {
-                ret[*returnSize][0] = nums[left];
-                ret[*returnSize][1] = nums[i];
-                ret[*returnSize][2] = nums[j];
-                (*returnColumnSizes)[*returnSize] = 3;
-                (*returnSize)++;
-                ret[*returnSize] = malloc(sizeof(int) * 3);
-
-                while(nums[i] == nums[++i] && i < j) {}
-                while(nums[j] == nums[--j] && i < j) {}
-            }
-        }
-        while(nums[left] == nums[++left] && left + 1 < right) {}
-    }
-    
-    return ret;
-}
-#endif
-// 插入排序
-void insertion_sort(int arr[], int len)
-{
-    int i,j,temp;
-    for (i=1;i<len;i++)
-    {
-        temp = arr[i];
-        for (j=i;j>0 && arr[j-1]>temp;j--)
-        {
-            arr[j] = arr[j-1];
-        }
-        arr[j] = temp;
-    }
-}    
 
 // @lc code=end
 
