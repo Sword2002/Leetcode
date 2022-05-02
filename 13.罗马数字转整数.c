@@ -69,32 +69,50 @@
  */
 
 // @lc code=start
-/*
+#define RNTAB_LEN 15
 struct ROMAN
 {
     int num;
     char ch[3];
+    int slen;
 };
-const int RNTAB_LEN = 7;
-const struct ROMAN RomNumTab[15] = {
-    {1000, "M"},
-    {900,  "CM"},
-    {500,  "D"},
-    {400,  "CD"},
-    {100,  "C"},
-    {90,   "XC"},
-    {50,   "L"},
-    {40,   "XL"},
-    {10,   "X"},
-    {9,    "IX"},
-    {5,    "V"},
-    {4,    "IV"},
-    {3,    "III"},
-    {2,    "II"},
-    {1,    "I"},
-};
-*/
 
+const struct ROMAN RomNumTab[RNTAB_LEN] = {
+    {1000, "M",   1},
+    {900,  "CM",  2},
+    {500,  "D",   1},
+    {400,  "CD",  2},
+    {100,  "C",   1},
+    {90,   "XC",  2},
+    {50,   "L",   1},
+    {40,   "XL",  2},
+    {10,   "X",   1},
+    {9,    "IX",  2},
+    {5,    "V",   1},
+    {4,    "IV",  2},
+    {3,    "III", 3},
+    {2,    "II",  2},
+    {1,    "I",   1},
+};
+
+// 重构后代码简短
+int romanToInt(char * s){
+    int num  = 0;
+    char * rs = s;
+    int i = 0;
+    while (*rs && i < RNTAB_LEN) {
+        if (rs == strstr(rs, RomNumTab[i].ch)) { // 首位置开始匹配
+            num += RomNumTab[i].num;
+            rs += RomNumTab[i].slen;
+            continue;
+        }
+        i++;
+    }
+
+    return num;
+}
+
+#if 0
 int romanToInt(char * s){
     int num  = 0;
     while (*s)
@@ -165,7 +183,7 @@ int romanToInt(char * s){
 
     return num;
 }
-
+#endif
 
 // @lc code=end
 

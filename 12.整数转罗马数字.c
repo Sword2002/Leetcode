@@ -69,14 +69,16 @@
  */
 
 // @lc code=start
+#define RNTAB_LEN 13
+#define BUFF_LEN 32
 
 struct ROMAN
 {
     int num;
     char ch[3];
 };
-const int RNTAB_LEN = 7;
-const struct ROMAN RomNumTab[13] = {
+
+const struct ROMAN RomNumTab[RNTAB_LEN] = {
     {1000, "M"},
     {900,  "CM"},
     {500,  "D"},
@@ -92,7 +94,27 @@ const struct ROMAN RomNumTab[13] = {
     {1,    "I"},
 };
 
-char srlt[32]="M";
+
+char srlt[BUFF_LEN] = "";
+
+// 这个代码的优点是简短
+char * intToRoman(int num){
+    int x = num;
+    int k = 0;
+    int i = 0;
+    memset(srlt, 0, BUFF_LEN);
+    while (i < RNTAB_LEN) {
+        while (x >= RomNumTab[i].num) {
+            strcat(srlt, RomNumTab[i].ch);
+            x -= RomNumTab[i].num;
+        }
+        i++;
+    }
+
+    return srlt;
+}
+
+#if 0
 char * intToRoman(int num){
     int x = num;
     int k = 0;
@@ -181,7 +203,7 @@ char * intToRoman(int num){
     srlt[k++] = '\0';     
     return (srlt);
 }
-
+#endif
 
 // @lc code=end
 
